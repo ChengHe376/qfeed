@@ -3,10 +3,10 @@ services:
     image: mysql:8.0
     container_name: qfeed-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_ROOT_PASSWORD: yourpassword
       MYSQL_DATABASE: qfeed
       MYSQL_USER: qfeed
-      MYSQL_PASSWORD: qfeedpass
+      MYSQL_PASSWORD: yourpassword
       TZ: Asia/Shanghai
     ports:
       - "3307:3306"
