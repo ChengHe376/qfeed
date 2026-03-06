@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qfeed.post.mapper.PostMapper">
+
+    <resultMap id="PostResultMap" type="com.qfeed.post.domain.Post">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert"
+            parameterType="com.qfeed.post.domain.Post"
+            useGeneratedKeys="true"
+            keyProperty="id"
+            keyColumn="id">
+        insert into posts (
+            user_id,
+            content
+        ) values (
+                     #{userId},
+                     #{content}
+                 )
+    </insert>
+
+    <select id="findById"
+            resultMap="PostResultMap">
+        select
+            id,
+            user_id,
+            content,
+            created_at,
+            updated_at
+        from posts
+        where id = #{id}
+    </select>
+
+    <select id="listFeed"
+            resultMap="PostResultMap">
+        select
+        id,
+        user_id,
+        content,
+        created_at,
+        updated_at
+        from posts
+        <where>
+            <if test="cursorCreatedAt != null and cursorId != null">
+                (
+                created_at &lt; #{cursorCreatedAt}
+                or (created_at = #{cursorCreatedAt} and id &lt; #{cursorId})
+                )
+            </if>
+        </where>
+        order by created_at desc, id desc
+        limit #{limit}
+    </select>
+
+</mapper>
