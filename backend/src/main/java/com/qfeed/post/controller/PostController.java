@@ -36,4 +36,46 @@ public class PostController {
         PostItem item = postService.createPost(userId, username, req);
         return ResponseEntity.ok(item);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable("id") Long id,
+                                           HttpServletRequest request) {
+        Object userIdAttr = request.getAttribute("userId");
+        if (userIdAttr == null) {
+            throw new IllegalArgumentException("unauthorized");
+        }
+
+        Long userId = (Long) userIdAttr;
+        postService.deletePost(userId, id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/like")
+    public ResponseEntity<Void> likePost(@PathVariable("id") Long id,
+                                         HttpServletRequest request) {
+        Object userIdAttr = request.getAttribute("userId");
+        if (userIdAttr == null) {
+            throw new IllegalArgumentException("unauthorized");
+        }
+
+        Long userId = (Long) userIdAttr;
+        postService.likePost(userId, id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/{id}/like")
+    public ResponseEntity<Void> unlikePost(@PathVariable("id") Long id,
+                                           HttpServletRequest request) {
+        Object userIdAttr = request.getAttribute("userId");
+        if (userIdAttr == null) {
+            throw new IllegalArgumentException("unauthorized");
+        }
+
+        Long userId = (Long) userIdAttr;
+        postService.unlikePost(userId, id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

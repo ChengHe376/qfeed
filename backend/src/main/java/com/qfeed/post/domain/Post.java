@@ -8,4 +8,6 @@ public class Post {
     public String content;
     public LocalDateTime createdAt;
     public LocalDateTime updatedAt;
+    public LocalDateTime deletedAt;
+    public Integer likeCount;
 }

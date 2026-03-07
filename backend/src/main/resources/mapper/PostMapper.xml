@@ -11,6 +11,8 @@
         <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
+        <result property="deletedAt" column="deleted_at"/>
+        <result property="likeCount" column="like_count"/>
     </resultMap>
 
     <insert id="insert"
@@ -34,9 +36,11 @@
             user_id,
             content,
             created_at,
-            updated_at
+            updated_at,
+            deleted_at,
+            like_count
         from posts
-        where id = #{id}
+        where id = #{id} and deleted_at is null
     </select>
 
     <select id="listFeed"
@@ -46,11 +50,14 @@
         user_id,
         content,
         created_at,
-        updated_at
+        updated_at,
+        deleted_at,
+        like_count
         from posts
         <where>
+            deleted_at is null
             <if test="cursorCreatedAt != null and cursorId != null">
-                (
+                and (
                 created_at &lt; #{cursorCreatedAt}
                 or (created_at = #{cursorCreatedAt} and id &lt; #{cursorId})
                 )
@@ -59,5 +66,28 @@
         order by created_at desc, id desc
         limit #{limit}
     </select>
+
+    <update id="softDeleteByIdAndUserId">
+        update posts
+        set deleted_at = #{deletedAt}
+        where id = #{id}
+        and user_id = #{userId}
+        and deleted_at is null
+    </update>
+
+    <update id="increaseLikeCount">
+        update posts
+        set like_count = like_count + 1
+        where id = #{id}
+        and deleted_at is null
+    </update>
+
+    <update id="decreaseLikeCount">
+        update posts
+        set like_count = like_count - 1
+        where id = #{id}
+        and deleted_at is null
+        and like_count > 0
+    </update>
 
 </mapper>

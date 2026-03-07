@@ -8,6 +8,8 @@ public class PostItem {
     public String username;
     public String content;
     public LocalDateTime createdAt;
+    public Integer likeCount;
+    public Boolean likedByMe;
 
     public PostItem() {
     }
@@ -18,5 +20,7 @@ public class PostItem {
         this.username = username;
         this.content = content;
         this.createdAt = createdAt;
+        this.likeCount = likeCount;
+        this.likedByMe = likedByMe;
     }
 }

@@ -19,4 +19,12 @@ public interface PostMapper {
             @Param("cursorId") Long cursorId,
             @Param("limit") int limit
     );
+
+    int softDeleteByIdAndUserId(@Param("id") Long id,
+                                @Param("userId") Long userId,
+                                @Param("deletedAt") LocalDateTime deletedAt);
+
+    int increaseLikeCount(@Param("id") Long id);
+
+    int decreaseLikeCount(@Param("id") Long id);
 }
